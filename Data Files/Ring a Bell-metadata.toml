@@ -1,0 +1,13 @@
+[package]
+name = "Ring a Bell"
+description = "Makes Sixth House Bell Hammer actually usable."
+homepage = "https://www.nexusmods.com/morrowind/mods/56342"
+repository = "https://github.com/C3pa/Morrowind-Ring-a-Bell"
+authors = [ "C3pa" ]
+version = "1.0.0"
+
+[tools.mwse]
+lua-mod = "Ring a Bell"
+
+[dependencies.mwse]
+buildnumber = 3520
