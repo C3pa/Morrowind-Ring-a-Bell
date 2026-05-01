@@ -1,10 +1,8 @@
-local logger = require("logging.logger")
-
 local config = require("Ring a Bell.config")
 local i18n = mwse.loadTranslations("Ring a Bell")
 
 
-local log = logger.new({
+local log = mwse.Logger.new({
 	name = "Ring a Bell",
 	logLevel = config.logLevel,
 })
@@ -12,6 +10,7 @@ local log = logger.new({
 dofile("Ring a Bell.mcm")
 
 log:info("Initialized v%s", config.version)
+
 local sounds = {
 	["active_6th_bell_01"] = "fx\\envrn\\bell6.wav",
 	["active_6th_bell_02"] = "fx\\envrn\\bell5.wav",
