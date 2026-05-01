@@ -20,6 +20,8 @@ local sounds = {
 	["active_6th_bell_06"] = "fx\\envrn\\bell1.wav",
 }
 local hammerId = "6th bell hammer"
+local impactSoundsInstalled = lfs.directoryexists("Data Files\\MWSE\\mods\\Impact Sounds")
+local impactSoundsFolderSounds = "4NM"
 
 ---@param reference tes3reference
 local function getSoundPath(reference)
@@ -44,6 +46,30 @@ end
 
 
 local initialPitch = 1.0
+local blockNextSound = false
+local firstSound = false
+
+
+---@param e addTempSoundEventData
+local function blockNextImpactSound(e)
+	if not impactSoundsInstalled then return end
+	if e.reference ~= tes3.player then return end
+	if e.isVoiceover then return end
+	if not blockNextSound then return end
+	if not e.path:startswith(impactSoundsFolderSounds) then return end
+	-- The first sound played by Impact Sounds is custom attack swing sound.
+	-- The next one is attack hit sound which we want to block in this case.
+	firstSound = not firstSound
+	if firstSound then return end
+	log:debug("Blocking sound: %q", e.path)
+	blockNextSound = false
+	return true
+end
+event.register(tes3.event.addTempSound, blockNextImpactSound, { priority = 100 })
+
+local function setBlockNextSound()
+	blockNextSound = true
+end
 
 ---@param e attackEventData
 local function onAttack(e)
@@ -69,6 +95,7 @@ local function onAttack(e)
 	local pitch = math.remap(swing, 0.0, 1.0,
 		changePich(initialPitch, -config.semitones), changePich(initialPitch, config.semitones))
 	local refHandle = tes3.makeSafeObjectHandle(hitReference)
+	setBlockNextSound()
 	timer.start({
 		duration = 0.25,
 		type = timer.simulate,
