@@ -19,7 +19,7 @@ local sounds = {
 	["active_6th_bell_05"] = "fx\\envrn\\bell2.wav",
 	["active_6th_bell_06"] = "fx\\envrn\\bell1.wav",
 }
-local hammerId = "6th bell hammer"
+
 local impactSoundsInstalled = lfs.directoryexists("Data Files\\MWSE\\mods\\Impact Sounds")
 local impactSoundsFolderSounds = "4NM"
 
@@ -45,7 +45,17 @@ local function changePich(pitch, semitones)
 end
 
 
-local initialPitch = 1.0
+local initialPitch = {
+	[tes3.weaponType.shortBladeOneHand] = 1.6,
+	[tes3.weaponType.longBladeOneHand] = 1.5,
+	[tes3.weaponType.longBladeTwoClose] = 1.2,
+	[tes3.weaponType.bluntOneHand] = 1.2,
+	[tes3.weaponType.bluntTwoClose] = 1.0,
+	[tes3.weaponType.bluntTwoWide] = 1.2,
+	[tes3.weaponType.spearTwoWide] = 1.2,
+	[tes3.weaponType.axeOneHand] = 1.3,
+	[tes3.weaponType.axeTwoHand] = 1.0,
+}
 local blockNextSound = false
 local firstSound = false
 
@@ -77,7 +87,7 @@ local function onAttack(e)
 	if ref ~= tes3.player then return end
 	local equipped = tes3.mobilePlayer.readiedWeapon
 	if not equipped then return end
-	if string.lower(equipped.object.id) ~= hammerId then return end
+	local weapon = equipped.object
 
 	local hit = tes3.rayTest({
 		position = tes3.getPlayerEyePosition(),
@@ -91,9 +101,10 @@ local function onAttack(e)
 	local sound = getSoundPath(hitReference)
 	if not sound then return end
 
+	local pitch = initialPitch[weapon.type]
 	local swing = e.mobile.actionData.attackSwing
-	local pitch = math.remap(swing, 0.0, 1.0,
-		changePich(initialPitch, -config.semitones), changePich(initialPitch, config.semitones))
+
+	pitch = math.remap(swing, 0.0, 1.0, changePich(pitch, -config.semitones), changePich(pitch, config.semitones))
 	local refHandle = tes3.makeSafeObjectHandle(hitReference)
 	setBlockNextSound()
 	timer.start({
