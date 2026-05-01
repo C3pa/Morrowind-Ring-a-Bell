@@ -1,7 +1,7 @@
 				Ring a Bell
 				By C3pa
 
-Version: 1.0.0
+Version: 1.1.0
 
 _________
 Contents
@@ -36,6 +36,9 @@ Changelog
 ____________
 1.0.0
 Initial Release.
+1.1.0
+Implement compatibility with Impact Sounds.
+You can now use any kind of weapon to ring the bells.
 
 ________
 Contact

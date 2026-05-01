@@ -1,6 +1,6 @@
 # Ring a Bell
 
-A Morrowind mod that allows the player to ring the Sixth House bells using the Sixth House Bell Hammer.
+A Morrowind mod that allows the player to ring the Sixth House bells by hitting them with a weapon.
 
 # Usage
 
